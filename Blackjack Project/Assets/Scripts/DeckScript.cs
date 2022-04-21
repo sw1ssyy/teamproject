@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class DeckScript : MonoBehaviour
 {
-    public Sprite[] cards;
-    int[] cardvalues = new int[53];
+    public Sprite[] cardSprites;
+    int[] cardValues = new int[53];
     int currentIndex = 0;
-    // Start is called before the first frame update
+
     void Start()
     {
         GetCardValues();
@@ -15,55 +15,51 @@ public class DeckScript : MonoBehaviour
 
     void GetCardValues()
     {
-        int value = 0;
-        // Loops to give each card a value;
-       for (int i = 0; i < cards.Length; i++)
+        int num = 0;
+        // Loop to assign values to the cards
+        for (int i = 0; i < cardSprites.Length; i++)
         {
-            value = i;
-            // Every 13 cards, the 
-            value %= 13;
-            if (value > 10 || value == 0)
+            num = i;
+            // Count up to the amout of cards, 52
+            num %= 13;
+            // if there is a remainder after x/13, then remainder
+            // is used as the value, unless over 10, the use 10
+            if (num > 10 || num == 0)
             {
-                value = 10;
+                num = 10;
             }
-            cardvalues[i] = value++;
+            cardValues[i] = num++;
+        }
+    }
+
+    public void cardShuffle()
+    {
+        // Standard array data swapping technique
+        for (int i = cardSprites.Length - 1; i > 0; --i)
+        {
+            int j = Mathf.FloorToInt(Random.Range(0.0f, 1.0f) * cardSprites.Length - 1) + 1;
+            Sprite face = cardSprites[i];
+            cardSprites[i] = cardSprites[j];
+            cardSprites[j] = face;
+
+            int value = cardValues[i];
+            cardValues[i] = cardValues[j];
+            cardValues[j] = value;
         }
         currentIndex = 1;
     }
-    // Creates another deck of cards, and
-    // Swaps the value and positons of cards with the orginal deck of cards
-    // Sets the new value and new sprite
-   
-    public void cardShuffle()
-    {
-        for (int i = cards.Length - 1; i > 0; --i)
-        {
-            int r = Mathf.FloorToInt(Random.Range(0.0f, 1.0f) * cards.Length - 1) + 1;
-            Sprite face = cards[i];
-            cards[i] = cards[r];
-            cards[r] = face;
 
-            int value = cardvalues[i];
-            cardvalues[r] = value;
-        }
-    }
-    public int DealCard(CardScript CardScript)
+    public int DealCard(CardScript cardScript)
     {
-        CardScript.SetSprite(cards[currentIndex]);
-        CardScript.SetCardValue(cardvalues[currentIndex]);
+        cardScript.SetSprite(cardSprites[currentIndex]);
+        cardScript.SetCardValue(cardValues[currentIndex]);
         currentIndex++;
-        return CardScript.GetCardValue();
+        return cardScript.GetCardValue();
     }
 
     public Sprite GetCardBack()
     {
-        return cards[0];
+        return cardSprites[0];
     }
 
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

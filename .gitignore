@@ -58,3 +58,6 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+/Blackjack Project/obj/Debug
+/Blackjack Project/ProjectSettings
+/Blackjack Project
