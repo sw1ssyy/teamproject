@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+
 public class GameManager : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -13,7 +15,7 @@ public class GameManager : MonoBehaviour
     public Button hitButton;
     public Button StandButton;
     public Button BetButton;
-    
+
     private int standindex = 0;
 
     public PlayerScript playerScript;
@@ -46,15 +48,12 @@ public class GameManager : MonoBehaviour
         playerScript.ResetGame();
         dealerScript.ResetGame();
         // Hide deal hand score at start of deal
-        DealerHandAmount.gameObject.SetActive(false);
-        mainText.gameObject.SetActive(false);
-        DealerHandAmount.gameObject.SetActive(false);
+        HideButtons();
         GameObject.Find("Deck").GetComponent<DeckScript>().cardShuffle();
         playerScript.StartHand();
         dealerScript.StartHand();
         // Update the scores displayed
-        PlayerHandAmount.text = "Hand: " + playerScript.handValue.ToString();
-        DealerHandAmount.text = "Hand: " + dealerScript.handValue.ToString();
+        UpdateScores();
         // Place card back on dealer card, hide card
         hiddencard.GetComponent<Renderer>().enabled = true;
         // Adjust buttons visibility
@@ -67,6 +66,19 @@ public class GameManager : MonoBehaviour
         playerScript.ChangeMoney(-20);
         TotalMoney.text = "£" + playerScript.GetMoney().ToString();
 
+    }
+
+    private void UpdateScores()
+    {
+        PlayerHandAmount.text = "Hand: " + playerScript.handValue.ToString();
+        DealerHandAmount.text = "Hand: " + dealerScript.handValue.ToString();
+    }
+
+    private void HideButtons()
+    {
+        DealerHandAmount.gameObject.SetActive(false);
+        mainText.gameObject.SetActive(false);
+        DealerHandAmount.gameObject.SetActive(false);
     }
 
     private void HitClicked()
@@ -123,8 +135,8 @@ public class GameManager : MonoBehaviour
         // if dealer busts, player didnt, or player has more points, player wins
         else if (dealerBust || playerScript.handValue > dealerScript.handValue)
         {
-            mainText.text = "You win  £" + gamepot/2 + "!!";
-            playerScript.ChangeMoney(gamepot* 2);
+            mainText.text = "You win  £" + gamepot / 2 + "!!";
+            playerScript.ChangeMoney(gamepot * 2);
         }
         //Check for tie, return bets
         else if (playerScript.handValue == dealerScript.handValue)

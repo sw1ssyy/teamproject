@@ -12,7 +12,7 @@ public class PlayerScript : MonoBehaviour
     public int handValue = 0;
     // Users money to bet
     private int money = 1000;
-  
+
     public GameObject[] hand;
 
     public int cardIndex = 0;
